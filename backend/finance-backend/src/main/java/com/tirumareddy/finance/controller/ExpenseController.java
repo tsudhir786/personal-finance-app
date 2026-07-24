@@ -3,6 +3,7 @@ package com.tirumareddy.finance.controller;
 import com.tirumareddy.finance.entity.Expense;
 import com.tirumareddy.finance.service.ExpenseService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,5 +20,10 @@ public class ExpenseController {
     @GetMapping("/api/expenses")
     public List<Expense> getExpenses() {
         return expenseService.getExpenses();
+    }
+
+    @GetMapping("/api/expenses/{id}")
+    public Expense getExpenseById(@PathVariable Long id) {
+        return expenseService.getExpenseById(id);
     }
 }
