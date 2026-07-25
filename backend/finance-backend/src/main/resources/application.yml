@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: finance-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/personal_finance
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
