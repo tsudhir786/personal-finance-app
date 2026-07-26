@@ -2,6 +2,7 @@ package com.tirumareddy.finance.controller;
 
 import com.tirumareddy.finance.entity.Expense;
 import com.tirumareddy.finance.service.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,8 @@ public class ExpenseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Expense createExpense(@RequestBody Expense expense) {
+    public Expense createExpense(@Valid @RequestBody Expense expense) {
+        System.out.println("Controller reached");
         return expenseService.createExpense(expense);
     }
 }

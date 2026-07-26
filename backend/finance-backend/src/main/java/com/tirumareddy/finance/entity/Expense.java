@@ -1,11 +1,16 @@
 package com.tirumareddy.finance.entity;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 import java.math.BigDecimal;
 
 public class Expense {
 
     private Long id;
+    @NotBlank
     private String description;
+    @Positive
     private BigDecimal amount;
 
     public Expense() {
