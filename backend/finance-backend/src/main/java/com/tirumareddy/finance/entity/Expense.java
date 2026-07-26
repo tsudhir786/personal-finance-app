@@ -8,6 +8,9 @@ public class Expense {
     private String description;
     private BigDecimal amount;
 
+    public Expense() {
+    }
+
     public Expense(Long id, String description, BigDecimal amount) {
         this.id = id;
         this.description = description;
@@ -24,5 +27,13 @@ public class Expense {
 
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }

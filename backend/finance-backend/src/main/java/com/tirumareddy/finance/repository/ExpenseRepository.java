@@ -59,4 +59,23 @@ public class ExpenseRepository {
             return Optional.empty();
         }
     }
+
+    public Expense save(Expense expense) {
+        String sql = """
+                INSERT INTO expenses (description, amount)
+                VALUES (?, ?)
+                RETURNING id, description, amount
+                """;
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                (resultSet, rowNum) -> new Expense(
+                        resultSet.getLong("id"),
+                        resultSet.getString("description"),
+                        resultSet.getBigDecimal("amount")
+                ),
+                expense.getDescription(),
+                expense.getAmount()
+        );
+    }
 }

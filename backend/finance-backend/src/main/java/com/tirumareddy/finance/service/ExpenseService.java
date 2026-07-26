@@ -29,4 +29,8 @@ public class ExpenseService {
                         "Expense not found with id: " + id
                 ));
     }
+
+    public Expense createExpense(Expense expense) {
+        return expenseRepository.save(expense);
+    }
 }

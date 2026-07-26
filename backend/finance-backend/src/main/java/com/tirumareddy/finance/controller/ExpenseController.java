@@ -2,6 +2,7 @@ package com.tirumareddy.finance.controller;
 
 import com.tirumareddy.finance.entity.Expense;
 import com.tirumareddy.finance.service.ExpenseService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,5 +25,11 @@ public class ExpenseController {
     @GetMapping("/{id}")
     public Expense getExpenseById(@PathVariable Long id) {
         return expenseService.getExpenseById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Expense createExpense(@RequestBody Expense expense) {
+        return expenseService.createExpense(expense);
     }
 }
