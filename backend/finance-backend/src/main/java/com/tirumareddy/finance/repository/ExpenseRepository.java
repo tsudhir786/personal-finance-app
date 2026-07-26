@@ -1,11 +1,13 @@
 package com.tirumareddy.finance.repository;
 
 import com.tirumareddy.finance.entity.Expense;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ExpenseRepository {
@@ -36,12 +38,25 @@ public class ExpenseRepository {
         );
     }
 
-    public Expense findById(Long id) {
-        for (Expense expense : findAll()) {
-            if (expense.getId().equals(id)) {
-                return expense;
-            }
+    public Optional<Expense> findById(Long id) {
+        String sql = """
+                SELECT id, description, amount
+                FROM expenses
+                WHERE id = ?
+                """;
+        try {
+            Expense expense = jdbcTemplate.queryForObject(
+                    sql,
+                    (resultSet, rowNum) -> new Expense(
+                            resultSet.getLong("id"),
+                            resultSet.getString("description"),
+                            resultSet.getBigDecimal("amount")
+                    ),
+                    id
+            );
+            return Optional.of(expense);
+        } catch (EmptyResultDataAccessException exception) {
+            return Optional.empty();
         }
-        return null;
     }
 }

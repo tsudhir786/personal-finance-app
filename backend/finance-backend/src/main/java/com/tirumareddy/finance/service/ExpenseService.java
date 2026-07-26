@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExpenseService {
@@ -23,14 +23,10 @@ public class ExpenseService {
     }
 
     public Expense getExpenseById(Long id) {
-        Expense expense = expenseRepository.findById(id);
-
-        if (expense == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Expense not found with id: " + id
-            );
-        }
-        return expense;
+        return expenseRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Expense not found with id: " + id
+                ));
     }
 }
