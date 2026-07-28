@@ -1,6 +1,7 @@
 package com.tirumareddy.finance.repository;
 
 import com.tirumareddy.finance.entity.Expense;
+import com.tirumareddy.finance.exception.ExpenseNotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -77,5 +78,32 @@ public class ExpenseRepository {
                 expense.getDescription(),
                 expense.getAmount()
         );
+    }
+
+    public Expense update(Long id, Expense expense) {
+        String sql = """
+                UPDATE expenses
+                SET description = ?,
+                    amount = ?
+                WHERE id = ?
+                RETURNING id, description, amount
+                """;
+
+        try {
+            return jdbcTemplate.queryForObject(
+                    sql,
+                    (resultSet, rowNum) -> new Expense(
+                            resultSet.getLong("id"),
+                            resultSet.getString("description"),
+                            resultSet.getBigDecimal("amount")
+                    ),
+                    expense.getDescription(),
+                    expense.getAmount(),
+                    id
+            );
+        } catch (EmptyResultDataAccessException exception) {
+            throw new ExpenseNotFoundException(id);
+        }
+
     }
 }

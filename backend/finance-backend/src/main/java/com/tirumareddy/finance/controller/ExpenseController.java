@@ -34,4 +34,12 @@ public class ExpenseController {
         System.out.println("Controller reached");
         return expenseService.createExpense(expense);
     }
+
+    @PutMapping("/{id}")
+    public Expense updateExpense(
+            @PathVariable Long id,
+            @Valid @RequestBody Expense expense) {
+        return expenseService.updateExpense(id, expense);
+    }
+
 }

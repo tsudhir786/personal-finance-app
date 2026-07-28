@@ -33,4 +33,8 @@ public class ExpenseService {
     public Expense createExpense(Expense expense) {
         return expenseRepository.save(expense);
     }
+
+    public Expense updateExpense(Long id, Expense expense) {
+        return expenseRepository.update(id, expense);
+    }
 }

@@ -1,4 +1,7 @@
 package com.tirumareddy.finance.exception;
 
-public class ExpenseNotFoundException {
+public class ExpenseNotFoundException extends RuntimeException {
+    public ExpenseNotFoundException(Long id) {
+        super("Expense not found with id: " + id);
+    }
 }
