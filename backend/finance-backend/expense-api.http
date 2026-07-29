@@ -54,3 +54,11 @@ Content-Type: application/json
   "description": "",
   "amount": -100
 }
+
+
+### Delete existing expense
+DELETE http://localhost:8080/api/expenses/10
+
+
+### Delete missing expense
+DELETE http://localhost:8080/api/expenses/9999

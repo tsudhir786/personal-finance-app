@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,5 +106,16 @@ public class ExpenseRepository {
             throw new ExpenseNotFoundException(id);
         }
 
+    }
+
+    public void delete(Long id) {
+        String sql = """
+                DELETE FROM expenses
+                WHERE id = ?
+                """;
+        int rowsAffected = jdbcTemplate.update(sql, id);
+        if (rowsAffected == 0) {
+            throw new ExpenseNotFoundException(id);
+        }
     }
 }
