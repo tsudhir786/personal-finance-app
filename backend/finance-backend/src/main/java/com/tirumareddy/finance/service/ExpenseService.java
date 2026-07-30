@@ -1,5 +1,7 @@
 package com.tirumareddy.finance.service;
 
+import com.tirumareddy.finance.dto.CreateExpenseRequest;
+import com.tirumareddy.finance.dto.ExpenseResponse;
 import com.tirumareddy.finance.entity.Expense;
 import com.tirumareddy.finance.repository.ExpenseRepository;
 import org.springframework.http.HttpStatus;
@@ -30,8 +32,20 @@ public class ExpenseService {
                 ));
     }
 
-    public Expense createExpense(Expense expense) {
-        return expenseRepository.save(expense);
+    public ExpenseResponse createExpense(CreateExpenseRequest request) {
+        Expense expense = new Expense(
+                null,
+                request.description(),
+                request.amount()
+        );
+
+        Expense savedExpense = expenseRepository.save(expense);
+
+        return new ExpenseResponse(
+                savedExpense.getId(),
+                savedExpense.getDescription(),
+                savedExpense.getAmount()
+        );
     }
 
     public Expense updateExpense(Long id, Expense expense) {

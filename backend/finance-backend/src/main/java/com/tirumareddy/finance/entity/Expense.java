@@ -8,9 +8,7 @@ import java.math.BigDecimal;
 public class Expense {
 
     private Long id;
-    @NotBlank
     private String description;
-    @Positive
     private BigDecimal amount;
 
     public Expense() {

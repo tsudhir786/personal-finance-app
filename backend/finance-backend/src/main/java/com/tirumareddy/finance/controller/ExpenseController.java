@@ -1,5 +1,7 @@
 package com.tirumareddy.finance.controller;
 
+import com.tirumareddy.finance.dto.CreateExpenseRequest;
+import com.tirumareddy.finance.dto.ExpenseResponse;
 import com.tirumareddy.finance.entity.Expense;
 import com.tirumareddy.finance.service.ExpenseService;
 import jakarta.validation.Valid;
@@ -30,9 +32,9 @@ public class ExpenseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Expense createExpense(@Valid @RequestBody Expense expense) {
+    public ExpenseResponse createExpense(@Valid @RequestBody CreateExpenseRequest request) {
         System.out.println("Controller reached");
-        return expenseService.createExpense(expense);
+        return expenseService.createExpense(request);
     }
 
     @PutMapping("/{id}")
