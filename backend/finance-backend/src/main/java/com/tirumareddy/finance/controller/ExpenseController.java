@@ -2,6 +2,7 @@ package com.tirumareddy.finance.controller;
 
 import com.tirumareddy.finance.dto.CreateExpenseRequest;
 import com.tirumareddy.finance.dto.ExpenseResponse;
+import com.tirumareddy.finance.dto.UpdateExpenseRequest;
 import com.tirumareddy.finance.entity.Expense;
 import com.tirumareddy.finance.service.ExpenseService;
 import jakarta.validation.Valid;
@@ -38,10 +39,10 @@ public class ExpenseController {
     }
 
     @PutMapping("/{id}")
-    public Expense updateExpense(
+    public ExpenseResponse updateExpense(
             @PathVariable Long id,
-            @Valid @RequestBody Expense expense) {
-        return expenseService.updateExpense(id, expense);
+            @Valid @RequestBody UpdateExpenseRequest request) {
+        return expenseService.updateExpense(id, request);
     }
 
     @DeleteMapping("/{id}")

@@ -8,6 +8,6 @@ public record ExpenseResponse(
         BigDecimal amount
 ) {
     public ExpenseResponse{
-        System.out.println("Expense Respone path");
+        System.out.println("Expense Response DTO");
     }
 }

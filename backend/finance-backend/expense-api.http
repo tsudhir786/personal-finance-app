@@ -69,5 +69,34 @@ Content-Type: application/json
 
 {
   "description": "Car EMI",
-  "amount": 10002.00
+  "amount": 10004.00,
+  "unknownField": "extra value"
+}
+
+
+### Update existing expense using DTO
+PUT http://localhost:8080/api/expenses/11
+Content-Type: application/json
+
+{
+  "description": "Updated Mobile Recharge",
+  "amount": 899.00
+}
+
+### Update expense with invalid DTO
+PUT http://localhost:8080/api/expenses/11
+Content-Type: application/json
+
+{
+  "description": "",
+  "amount": -100
+}
+
+### Update missing expense using DTO
+PUT http://localhost:8080/api/expenses/9999
+Content-Type: application/json
+
+{
+  "description": "Unknown Expense",
+  "amount": 500.00
 }

@@ -2,6 +2,7 @@ package com.tirumareddy.finance.service;
 
 import com.tirumareddy.finance.dto.CreateExpenseRequest;
 import com.tirumareddy.finance.dto.ExpenseResponse;
+import com.tirumareddy.finance.dto.UpdateExpenseRequest;
 import com.tirumareddy.finance.entity.Expense;
 import com.tirumareddy.finance.repository.ExpenseRepository;
 import org.springframework.http.HttpStatus;
@@ -48,8 +49,20 @@ public class ExpenseService {
         );
     }
 
-    public Expense updateExpense(Long id, Expense expense) {
-        return expenseRepository.update(id, expense);
+    public ExpenseResponse updateExpense(Long id, UpdateExpenseRequest request) {
+        Expense expense = new Expense(
+                id,
+                request.description(),
+                request.amount()
+        );
+
+        Expense updatedExpense = expenseRepository.update(id, expense);
+
+        return new ExpenseResponse(
+                updatedExpense.getId(),
+                updatedExpense.getDescription(),
+                updatedExpense.getAmount()
+        );
     }
 
     public void deleteExpense(Long id) {

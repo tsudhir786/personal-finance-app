@@ -14,6 +14,6 @@ public record CreateExpenseRequest(
         BigDecimal amount
 ) {
         public CreateExpenseRequest {
-                System.out.println("Create Expense Request Record");
+                System.out.println("Create Expense Request DTO");
         }
 }

@@ -14,4 +14,7 @@ public record UpdateExpenseRequest(
         BigDecimal amount
 
 ) {
+        public UpdateExpenseRequest{
+                System.out.println("Update Expense Request DTO");
+        }
 }
