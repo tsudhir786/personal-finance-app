@@ -7,7 +7,7 @@ public record ExpenseResponse(
         String description,
         BigDecimal amount
 ) {
-    public ExpenseResponse{
+    public ExpenseResponse {
         System.out.println("Expense Response DTO");
     }
 }

@@ -1,6 +1,10 @@
 package com.tirumareddy.finance.exception;
 
+import com.tirumareddy.finance.dto.ApiErrorResponse;
+import com.tirumareddy.finance.dto.ExpenseResponse;
+import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -8,40 +12,39 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleValidationException(MethodArgumentNotValidException exception) {
-
-        Map<String, String> fieldErrors = new LinkedHashMap<>();
-
-        exception.getBindingResult()
+    public ApiErrorResponse handleValidationException(MethodArgumentNotValidException exception) {
+        Map<String, String> fieldErrors = exception
+                .getBindingResult()
                 .getFieldErrors()
-                .forEach(fieldError ->
-                        fieldErrors.put(
-                                fieldError.getField(),
-                                fieldError.getDefaultMessage()
-                        ));
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("status", 400);
-        response.put("error", "Validation failed");
-        response.put("fieldErrors", fieldErrors);
-
-        return response;
+                .stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        FieldError::getDefaultMessage,
+                        (existingMessage, newMessage) -> existingMessage
+                ));
+        return new ApiErrorResponse(
+                400,
+                "Validation failed",
+                "Request contains invalid fields",
+                fieldErrors
+        );
     }
 
     @ExceptionHandler(ExpenseNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> handleExpenseNotFound(
-            ExpenseNotFoundException exception) {
-        Map<String, Object> respone = new LinkedHashMap<>();
-        respone.put("status", 404);
-        respone.put("error", "Expense not found");
-        respone.put("message", exception.getMessage());
-
-        return respone;
+    public ApiErrorResponse handleExpenseNotFound(ExpenseNotFoundException exception) {
+        return new ApiErrorResponse(
+                404,
+                "Expense not found",
+                exception.getMessage(),
+                Map.of()
+        );
     }
 }

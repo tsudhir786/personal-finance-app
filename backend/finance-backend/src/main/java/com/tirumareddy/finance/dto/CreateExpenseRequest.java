@@ -13,7 +13,7 @@ public record CreateExpenseRequest(
         @Positive
         BigDecimal amount
 ) {
-        public CreateExpenseRequest {
-                System.out.println("Create Expense Request DTO");
-        }
+    public CreateExpenseRequest {
+        System.out.println("Create Expense Request DTO");
+    }
 }
