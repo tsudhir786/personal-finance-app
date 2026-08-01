@@ -22,12 +22,12 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public List<Expense> getExpenses() {
+    public List<ExpenseResponse> getExpenses() {
         return expenseService.getExpenses();
     }
 
     @GetMapping("/{id}")
-    public Expense getExpenseById(@PathVariable Long id) {
+    public ExpenseResponse getExpenseById(@PathVariable Long id) {
         return expenseService.getExpenseById(id);
     }
 

@@ -4,6 +4,7 @@ import com.tirumareddy.finance.dto.CreateExpenseRequest;
 import com.tirumareddy.finance.dto.ExpenseResponse;
 import com.tirumareddy.finance.dto.UpdateExpenseRequest;
 import com.tirumareddy.finance.entity.Expense;
+import com.tirumareddy.finance.exception.ExpenseNotFoundException;
 import com.tirumareddy.finance.repository.ExpenseRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,16 +22,26 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
 
-    public List<Expense> getExpenses() {
-        return expenseRepository.findAll();
+    public List<ExpenseResponse> getExpenses() {
+        return expenseRepository.findAll()
+                .stream()
+                .map(expense -> new ExpenseResponse(
+                        expense.getId(),
+                        expense.getDescription(),
+                        expense.getAmount()
+                )).toList();
     }
 
-    public Expense getExpenseById(Long id) {
-        return expenseRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Expense not found with id: " + id
-                ));
+    public ExpenseResponse getExpenseById(Long id) {
+
+        Expense expense = expenseRepository.findById(id)
+                .orElseThrow(() -> new ExpenseNotFoundException(id));
+
+        return new ExpenseResponse(
+                expense.getId(),
+                expense.getDescription(),
+                expense.getAmount()
+        );
     }
 
     public ExpenseResponse createExpense(CreateExpenseRequest request) {

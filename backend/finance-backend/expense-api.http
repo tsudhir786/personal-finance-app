@@ -3,7 +3,7 @@ GET http://localhost:8080/api/expenses
 
 
 ### Get expense by ID
-GET http://localhost:8080/api/expenses/6
+GET http://localhost:8080/api/expenses/15
 
 
 ### Create valid expense
@@ -57,7 +57,7 @@ Content-Type: application/json
 
 
 ### Delete existing expense
-DELETE http://localhost:8080/api/expenses/10
+DELETE http://localhost:8080/api/expenses/15
 
 
 ### Delete missing expense
