@@ -2,11 +2,11 @@ package com.tirumareddy.finance.service;
 
 import com.tirumareddy.finance.dto.CategoryResponse;
 import com.tirumareddy.finance.entity.Category;
+import com.tirumareddy.finance.exception.CategoryNotFoundException;
 import com.tirumareddy.finance.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -27,10 +27,15 @@ public class CategoryService {
                 ).toList();
     }
 
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id)
+    public CategoryResponse getCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Category not found with id: " + id));
+                        new CategoryNotFoundException(id));
+
+        return new CategoryResponse(
+                category.getId(),
+                category.getName()
+        );
     }
 
 }

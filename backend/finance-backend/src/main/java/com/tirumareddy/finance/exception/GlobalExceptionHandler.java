@@ -4,6 +4,7 @@ import com.tirumareddy.finance.dto.ApiErrorResponse;
 import com.tirumareddy.finance.dto.ExpenseResponse;
 import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,5 +47,19 @@ public class GlobalExceptionHandler {
                 exception.getMessage(),
                 Map.of()
         );
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleCategoryNotFound(CategoryNotFoundException exception) {
+        ApiErrorResponse response = new ApiErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                exception.getMessage(),
+                Map.of()
+        );
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .header("testing")
+                .body(response);
     }
 }
