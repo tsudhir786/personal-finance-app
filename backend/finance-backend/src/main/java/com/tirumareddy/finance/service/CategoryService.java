@@ -6,6 +6,7 @@ import com.tirumareddy.finance.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -24,6 +25,12 @@ public class CategoryService {
                                 category.getName()
                         )
                 ).toList();
+    }
+
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Category not found with id: " + id));
     }
 
 }
