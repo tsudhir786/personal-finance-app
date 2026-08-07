@@ -1,6 +1,7 @@
 package com.tirumareddy.finance.service;
 
 import com.tirumareddy.finance.dto.CategoryResponse;
+import com.tirumareddy.finance.dto.CreateCategoryRequest;
 import com.tirumareddy.finance.entity.Category;
 import com.tirumareddy.finance.exception.CategoryNotFoundException;
 import com.tirumareddy.finance.repository.CategoryRepository;
@@ -38,4 +39,17 @@ public class CategoryService {
         );
     }
 
+    public CategoryResponse createCategory(CreateCategoryRequest request) {
+        Category category = new Category(
+                null,
+                request.name()
+        );
+
+        Category savedCategory = categoryRepository.save(category);
+
+        return new CategoryResponse(
+                savedCategory.getId(),
+                savedCategory.getName()
+        );
+    }
 }

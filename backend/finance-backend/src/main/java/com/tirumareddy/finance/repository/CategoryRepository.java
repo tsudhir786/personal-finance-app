@@ -49,6 +49,22 @@ public class CategoryRepository {
                 id
         ).stream().findFirst();
     }
+
+    public Category save(Category category) {
+        String sql = """
+                        INSERT INTO categories (name)
+                        VALUES (?)
+                        RETURNING id, name
+                """;
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                (rs, rowNum) -> new Category(
+                        rs.getLong("id"),
+                        rs.getString("name")
+                ),
+                category.getName());
+    }
 }
 
 

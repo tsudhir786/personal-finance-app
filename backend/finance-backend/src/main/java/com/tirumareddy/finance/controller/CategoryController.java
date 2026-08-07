@@ -1,12 +1,12 @@
 package com.tirumareddy.finance.controller;
 
 import com.tirumareddy.finance.dto.CategoryResponse;
+import com.tirumareddy.finance.dto.CreateCategoryRequest;
 import com.tirumareddy.finance.entity.Category;
 import com.tirumareddy.finance.service.CategoryService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +28,13 @@ public class CategoryController {
     @GetMapping("/{id}")
     public CategoryResponse getCategoryById(@PathVariable Long id) {
         return categoryService.getCategoryById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CategoryResponse createCategory(
+            @Valid @RequestBody CreateCategoryRequest request
+    ) {
+        return categoryService.createCategory(request);
     }
 }
