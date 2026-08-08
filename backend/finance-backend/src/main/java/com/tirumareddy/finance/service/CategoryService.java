@@ -3,11 +3,14 @@ package com.tirumareddy.finance.service;
 import com.tirumareddy.finance.dto.CategoryResponse;
 import com.tirumareddy.finance.dto.CreateCategoryRequest;
 import com.tirumareddy.finance.entity.Category;
+import com.tirumareddy.finance.exception.CategoryAlreadyExistsException;
 import com.tirumareddy.finance.exception.CategoryNotFoundException;
 import com.tirumareddy.finance.repository.CategoryRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 @Service
 public class CategoryService {
@@ -44,12 +47,15 @@ public class CategoryService {
                 null,
                 request.name()
         );
+        try {
+            Category savedCategory = categoryRepository.save(category);
+            return new CategoryResponse(
+                    savedCategory.getId(),
+                    savedCategory.getName()
+            );
 
-        Category savedCategory = categoryRepository.save(category);
-
-        return new CategoryResponse(
-                savedCategory.getId(),
-                savedCategory.getName()
-        );
+        } catch (DataIntegrityViolationException exception) {
+            throw new CategoryAlreadyExistsException(request.name());
+        }
     }
 }

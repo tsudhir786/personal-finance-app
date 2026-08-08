@@ -9,4 +9,7 @@ public record CreateCategoryRequest(
         @Size(max = 100, message = "Category name must not exceed 100 characters")
         String name
 ) {
+    public CreateCategoryRequest {
+        System.out.println("Category Request DTO");
+    }
 }

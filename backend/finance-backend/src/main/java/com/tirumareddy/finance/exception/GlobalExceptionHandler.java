@@ -62,4 +62,19 @@ public class GlobalExceptionHandler {
                 .header("testing")
                 .body(response);
     }
+
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleCategoryAlreadyExists(
+            CategoryAlreadyExistsException exception
+    ) {
+        ApiErrorResponse response = new ApiErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                exception.getMessage(),
+                Map.of()
+        );
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
+    }
 }
