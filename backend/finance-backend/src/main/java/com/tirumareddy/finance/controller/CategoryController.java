@@ -2,6 +2,7 @@ package com.tirumareddy.finance.controller;
 
 import com.tirumareddy.finance.dto.CategoryResponse;
 import com.tirumareddy.finance.dto.CreateCategoryRequest;
+import com.tirumareddy.finance.dto.UpdateCategoryRequest;
 import com.tirumareddy.finance.entity.Category;
 import com.tirumareddy.finance.service.CategoryService;
 import jakarta.validation.Valid;
@@ -36,5 +37,12 @@ public class CategoryController {
             @Valid @RequestBody CreateCategoryRequest request
     ) {
         return categoryService.createCategory(request);
+    }
+
+    @PutMapping("/{id}")
+    public CategoryResponse updateCategory(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateCategoryRequest request) {
+        return categoryService.updateCategory(id, request);
     }
 }

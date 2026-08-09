@@ -65,6 +65,25 @@ public class CategoryRepository {
                 ),
                 category.getName());
     }
+
+    public Category update(Long id, Category category) {
+        String sql = """
+                UPDATE categories
+                SET name = ?
+                WHERE id = ?
+                RETURNING id, name
+                """;
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                (rs, rowNum) -> new Category(
+                        rs.getLong("id"),
+                        rs.getString("name")
+                ),
+                category.getName(),
+                category.getId()
+        );
+    }
 }
 
 

@@ -2,11 +2,13 @@ package com.tirumareddy.finance.service;
 
 import com.tirumareddy.finance.dto.CategoryResponse;
 import com.tirumareddy.finance.dto.CreateCategoryRequest;
+import com.tirumareddy.finance.dto.UpdateCategoryRequest;
 import com.tirumareddy.finance.entity.Category;
 import com.tirumareddy.finance.exception.CategoryAlreadyExistsException;
 import com.tirumareddy.finance.exception.CategoryNotFoundException;
 import com.tirumareddy.finance.repository.CategoryRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,6 +56,24 @@ public class CategoryService {
                     savedCategory.getName()
             );
 
+        } catch (DataIntegrityViolationException exception) {
+            throw new CategoryAlreadyExistsException(request.name());
+        }
+    }
+
+    public CategoryResponse updateCategory(Long id, UpdateCategoryRequest request) {
+        Category category = new Category(
+                id,
+                request.name()
+        );
+        try {
+            Category updatedCategory = categoryRepository.update(id, category);
+
+            return new CategoryResponse(
+                    updatedCategory.getId(),
+                    updatedCategory.getName());
+        } catch (EmptyResultDataAccessException exception) {
+            throw new CategoryNotFoundException(id);
         } catch (DataIntegrityViolationException exception) {
             throw new CategoryAlreadyExistsException(request.name());
         }
