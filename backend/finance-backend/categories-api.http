@@ -13,3 +13,10 @@ Content-Type: application/json
 {
   "name": "Groceries"
 }
+
+### Delete existing expense
+DELETE http://localhost:8080/api/categories/15
+
+
+### Delete missing expense
+DELETE http://localhost:8080/api/categories/9999

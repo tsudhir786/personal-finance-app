@@ -78,4 +78,12 @@ public class CategoryService {
             throw new CategoryAlreadyExistsException(request.name());
         }
     }
+
+    public void deleteCategory(Long id) {
+        int rowsAffected = categoryRepository.deleteById(id);
+
+        if (rowsAffected == 0) {
+            throw new CategoryNotFoundException(id);
+        }
+    }
 }

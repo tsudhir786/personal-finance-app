@@ -84,6 +84,16 @@ public class CategoryRepository {
                 category.getId()
         );
     }
+
+    public int deleteById(Long id) {
+        String sql = """
+                DELETE FROM Categories
+                WHERE id = ?
+                """;
+
+        int rowsAffected = jdbcTemplate.update(sql, id);
+        return rowsAffected;
+    }
 }
 
 
