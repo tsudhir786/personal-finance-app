@@ -6,6 +6,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.util.List;
@@ -26,7 +28,7 @@ public class ExpenseRepository {
                 new Expense(3L, "Shopping", new BigDecimal(3001))
         );*/
         String sql = """
-                SELECT id, description, amount
+                SELECT id, description, amount, category_id
                 FROM expenses
                 ORDER BY id
                 """;
@@ -35,14 +37,15 @@ public class ExpenseRepository {
                 (resultSet, rowNumber) -> new Expense(
                         resultSet.getLong("id"),
                         resultSet.getString("description"),
-                        resultSet.getBigDecimal("amount")
+                        resultSet.getBigDecimal("amount"),
+                        resultSet.getObject("category_id", Long.class)
                 )
         );
     }
 
     public Optional<Expense> findById(Long id) {
         String sql = """
-                SELECT id, description, amount
+                SELECT id, description, amount, category_id
                 FROM expenses
                 WHERE id = ?
                 """;
@@ -52,7 +55,8 @@ public class ExpenseRepository {
                     (resultSet, rowNum) -> new Expense(
                             resultSet.getLong("id"),
                             resultSet.getString("description"),
-                            resultSet.getBigDecimal("amount")
+                            resultSet.getBigDecimal("amount"),
+                            resultSet.getLong("category_id")
                     ),
                     id
             );
@@ -74,7 +78,8 @@ public class ExpenseRepository {
                 (resultSet, rowNum) -> new Expense(
                         resultSet.getLong("id"),
                         resultSet.getString("description"),
-                        resultSet.getBigDecimal("amount")
+                        resultSet.getBigDecimal("amount"),
+                        resultSet.getLong("category_id")
                 ),
                 expense.getDescription(),
                 expense.getAmount()
@@ -96,7 +101,8 @@ public class ExpenseRepository {
                     (resultSet, rowNum) -> new Expense(
                             resultSet.getLong("id"),
                             resultSet.getString("description"),
-                            resultSet.getBigDecimal("amount")
+                            resultSet.getBigDecimal("amount"),
+                            resultSet.getLong("category_id")
                     ),
                     expense.getDescription(),
                     expense.getAmount(),
