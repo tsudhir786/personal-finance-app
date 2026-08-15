@@ -5,17 +5,6 @@ GET http://localhost:8080/api/expenses
 ### Get expense by ID
 GET http://localhost:8080/api/expenses/15
 
-
-### Create valid expense
-POST http://localhost:8080/api/expenses
-Content-Type: application/json
-
-{
-  "description": "Groceries",
-  "amount": 850.00
-}
-
-
 ### Create invalid expense
 POST http://localhost:8080/api/expenses
 Content-Type: application/json
@@ -24,7 +13,6 @@ Content-Type: application/json
   "description": "",
   "amount": -100
 }
-
 
 ### Update existing expense
 PUT http://localhost:8080/api/expenses/6
@@ -99,4 +87,34 @@ Content-Type: application/json
 {
   "description": "Unknown Expense",
   "amount": 500.00
+}
+
+### Create valid expense
+POST http://localhost:8080/api/expenses
+Content-Type: application/json
+
+{
+  "description": "Groceries",
+  "amount": 89.00,
+  "categoryId": 1
+}
+
+### Create invalid expense - nonexistent category
+POST http://localhost:8080/api/expenses
+Content-Type: application/json
+
+{
+  "description": "Groceries",
+  "amount": 99.00,
+  "categoryId": 9999
+}
+
+### Create invalid expense - null category
+POST http://localhost:8080/api/expenses
+Content-Type: application/json
+
+{
+  "description": "Groceries",
+  "amount": 99.00,
+  "categoryId": null
 }

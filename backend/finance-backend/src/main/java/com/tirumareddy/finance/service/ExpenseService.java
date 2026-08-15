@@ -48,7 +48,8 @@ public class ExpenseService {
         Expense expense = new Expense(
                 null,
                 request.description(),
-                request.amount()
+                request.amount(),
+                request.categoryId()
         );
 
         Expense savedExpense = expenseRepository.save(expense);

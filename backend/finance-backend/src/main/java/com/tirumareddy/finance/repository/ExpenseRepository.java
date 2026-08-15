@@ -68,9 +68,9 @@ public class ExpenseRepository {
 
     public Expense save(Expense expense) {
         String sql = """
-                INSERT INTO expenses (description, amount)
-                VALUES (?, ?)
-                RETURNING id, description, amount
+                INSERT INTO expenses (description, amount, category_id)
+                VALUES (?, ?, ?)
+                RETURNING id, description, amount, category_id
                 """;
 
         return jdbcTemplate.queryForObject(
@@ -79,10 +79,11 @@ public class ExpenseRepository {
                         resultSet.getLong("id"),
                         resultSet.getString("description"),
                         resultSet.getBigDecimal("amount"),
-                        resultSet.getLong("category_id")
+                        resultSet.getObject("category_id", Long.class)
                 ),
                 expense.getDescription(),
-                expense.getAmount()
+                expense.getAmount(),
+                expense.getCategoryId()
         );
     }
 
