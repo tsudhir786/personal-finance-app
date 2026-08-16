@@ -3,10 +3,14 @@ package com.tirumareddy.finance.service;
 import com.tirumareddy.finance.dto.CreateExpenseRequest;
 import com.tirumareddy.finance.dto.ExpenseResponse;
 import com.tirumareddy.finance.dto.UpdateExpenseRequest;
+import com.tirumareddy.finance.entity.Category;
 import com.tirumareddy.finance.entity.Expense;
+import com.tirumareddy.finance.exception.CategoryNotFoundException;
 import com.tirumareddy.finance.exception.ExpenseNotFoundException;
+import com.tirumareddy.finance.repository.CategoryRepository;
 import com.tirumareddy.finance.repository.ExpenseRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,9 +21,11 @@ import java.util.Optional;
 public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ExpenseService(ExpenseRepository expenseRepository) {
+    public ExpenseService(ExpenseRepository expenseRepository, CategoryRepository categoryRepository) {
         this.expenseRepository = expenseRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<ExpenseResponse> getExpenses() {
@@ -45,6 +51,11 @@ public class ExpenseService {
     }
 
     public ExpenseResponse createExpense(CreateExpenseRequest request) {
+
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(() ->
+                        new CategoryNotFoundException(request.categoryId()));
+
         Expense expense = new Expense(
                 null,
                 request.description(),
