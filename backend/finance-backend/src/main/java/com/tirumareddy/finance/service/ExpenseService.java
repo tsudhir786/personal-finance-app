@@ -73,10 +73,15 @@ public class ExpenseService {
     }
 
     public ExpenseResponse updateExpense(Long id, UpdateExpenseRequest request) {
+        Category category = categoryRepository.findById(request.categoryId())
+                .orElseThrow(() ->
+                        new CategoryNotFoundException(request.categoryId()));
+
         Expense expense = new Expense(
                 id,
                 request.description(),
-                request.amount()
+                request.amount(),
+                request.categoryId()
         );
 
         Expense updatedExpense = expenseRepository.update(id, expense);

@@ -44,7 +44,7 @@ public class CategoryRepository {
                 sql,
                 (resultSet, rowNum) -> new Category(
                         resultSet.getLong("id"),
-                        resultSet.getString("description")
+                        resultSet.getString("name")
                 ),
                 id
         ).stream().findFirst();

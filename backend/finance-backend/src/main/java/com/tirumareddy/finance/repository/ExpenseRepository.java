@@ -91,9 +91,10 @@ public class ExpenseRepository {
         String sql = """
                 UPDATE expenses
                 SET description = ?,
-                    amount = ?
+                    amount = ?,
+                    category_id = ?
                 WHERE id = ?
-                RETURNING id, description, amount
+                RETURNING id, description, amount, category_id
                 """;
 
         try {
@@ -107,6 +108,7 @@ public class ExpenseRepository {
                     ),
                     expense.getDescription(),
                     expense.getAmount(),
+                    expense.getCategoryId(),
                     id
             );
         } catch (EmptyResultDataAccessException exception) {
