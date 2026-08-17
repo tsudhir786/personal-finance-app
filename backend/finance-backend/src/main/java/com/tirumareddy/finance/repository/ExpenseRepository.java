@@ -56,7 +56,7 @@ public class ExpenseRepository {
                             resultSet.getLong("id"),
                             resultSet.getString("description"),
                             resultSet.getBigDecimal("amount"),
-                            resultSet.getLong("category_id")
+                            resultSet.getObject("category_id", Long.class)
                     ),
                     id
             );

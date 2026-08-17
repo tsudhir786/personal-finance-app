@@ -34,7 +34,8 @@ public class ExpenseService {
                 .map(expense -> new ExpenseResponse(
                         expense.getId(),
                         expense.getDescription(),
-                        expense.getAmount()
+                        expense.getAmount(),
+                        expense.getCategoryId()
                 )).toList();
     }
 
@@ -46,7 +47,8 @@ public class ExpenseService {
         return new ExpenseResponse(
                 expense.getId(),
                 expense.getDescription(),
-                expense.getAmount()
+                expense.getAmount(),
+                expense.getCategoryId()
         );
     }
 
@@ -68,7 +70,8 @@ public class ExpenseService {
         return new ExpenseResponse(
                 savedExpense.getId(),
                 savedExpense.getDescription(),
-                savedExpense.getAmount()
+                savedExpense.getAmount(),
+                savedExpense.getCategoryId()
         );
     }
 
@@ -89,7 +92,8 @@ public class ExpenseService {
         return new ExpenseResponse(
                 updatedExpense.getId(),
                 updatedExpense.getDescription(),
-                updatedExpense.getAmount()
+                updatedExpense.getAmount(),
+                updatedExpense.getCategoryId()
         );
     }
 
