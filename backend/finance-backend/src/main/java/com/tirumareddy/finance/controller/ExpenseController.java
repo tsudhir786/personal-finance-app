@@ -2,6 +2,7 @@ package com.tirumareddy.finance.controller;
 
 import com.tirumareddy.finance.dto.CreateExpenseRequest;
 import com.tirumareddy.finance.dto.ExpenseResponse;
+import com.tirumareddy.finance.dto.ExpenseWithCategoryResponse;
 import com.tirumareddy.finance.dto.UpdateExpenseRequest;
 import com.tirumareddy.finance.entity.Expense;
 import com.tirumareddy.finance.service.ExpenseService;
@@ -22,8 +23,8 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public List<ExpenseResponse> getExpenses() {
-        return expenseService.getExpenses();
+    public List<ExpenseWithCategoryResponse> getExpenses() {
+        return expenseService.getAllExpenses();
     }
 
     @GetMapping("/{id}")

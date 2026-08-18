@@ -2,6 +2,7 @@ package com.tirumareddy.finance.service;
 
 import com.tirumareddy.finance.dto.CreateExpenseRequest;
 import com.tirumareddy.finance.dto.ExpenseResponse;
+import com.tirumareddy.finance.dto.ExpenseWithCategoryResponse;
 import com.tirumareddy.finance.dto.UpdateExpenseRequest;
 import com.tirumareddy.finance.entity.Category;
 import com.tirumareddy.finance.entity.Expense;
@@ -9,6 +10,7 @@ import com.tirumareddy.finance.exception.CategoryNotFoundException;
 import com.tirumareddy.finance.exception.ExpenseNotFoundException;
 import com.tirumareddy.finance.repository.CategoryRepository;
 import com.tirumareddy.finance.repository.ExpenseRepository;
+import com.tirumareddy.finance.repository.projection.ExpenseWithCategory;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -99,5 +101,18 @@ public class ExpenseService {
 
     public void deleteExpense(Long id) {
         expenseRepository.delete(id);
+    }
+
+    public List<ExpenseWithCategoryResponse> getAllExpenses() {
+        return expenseRepository.findAllWithCategory()
+                .stream()
+                .map(expenseWithCategory -> new ExpenseWithCategoryResponse(
+                        expenseWithCategory.id(),
+                        expenseWithCategory.description(),
+                        expenseWithCategory.amount(),
+                        expenseWithCategory.categoryId(),
+                        expenseWithCategory.categoryName()
+                ))
+                .toList();
     }
 }

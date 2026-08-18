@@ -2,6 +2,7 @@ package com.tirumareddy.finance.repository;
 
 import com.tirumareddy.finance.entity.Expense;
 import com.tirumareddy.finance.exception.ExpenseNotFoundException;
+import com.tirumareddy.finance.repository.projection.ExpenseWithCategory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -126,5 +127,30 @@ public class ExpenseRepository {
         if (rowsAffected == 0) {
             throw new ExpenseNotFoundException(id);
         }
+    }
+
+    public List<ExpenseWithCategory> findAllWithCategory() {
+        String sql = """
+                SELECT
+                            e.id,
+                            e.description,
+                            e.amount,
+                            e.category_id,
+                            c.name AS category_name
+                        FROM expenses e
+                        LEFT JOIN categories c
+                            ON e.category_id = c.id
+                        ORDER BY e.id
+                """;
+
+        return jdbcTemplate.query(
+                sql,
+                (resultSet, rowNum) -> new ExpenseWithCategory(
+                        resultSet.getLong("id"),
+                        resultSet.getString("description"),
+                        resultSet.getBigDecimal("amount"),
+                        resultSet.getObject("category_id", Long.class),
+                        resultSet.getString("category_name")
+                ));
     }
 }
