@@ -10,6 +10,6 @@ public record ExpenseWithCategory(
         String categoryName
 ) {
     public ExpenseWithCategory {
-        System.out.println("ExpenseWithCategory Project Read Record Created");
+        System.out.println("ExpenseWithCategory Projection Read Record Created");
     }
 }

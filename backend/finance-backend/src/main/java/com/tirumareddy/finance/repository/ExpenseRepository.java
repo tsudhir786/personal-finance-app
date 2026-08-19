@@ -23,11 +23,6 @@ public class ExpenseRepository {
     }
 
     public List<Expense> findAll() {
-   /*     return List.of(
-                new Expense(1L, "Groceries", new BigDecimal(1001)),
-                new Expense(2L, "Fuel", new BigDecimal(2001)),
-                new Expense(3L, "Shopping", new BigDecimal(3001))
-        );*/
         String sql = """
                 SELECT id, description, amount, category_id
                 FROM expenses
@@ -65,6 +60,33 @@ public class ExpenseRepository {
         } catch (EmptyResultDataAccessException exception) {
             return Optional.empty();
         }
+    }
+
+    public Optional<ExpenseWithCategory> findByIdWithCategory(Long id) {
+        String sql = """
+                SELECT
+                    e.id,
+                    e.description,
+                    e.amount,
+                    e.category_id,
+                    c.name AS category_name
+                FROM expenses e
+                LEFT JOIN categories c
+                    ON e.category_id = c.id
+                WHERE e.id = ?
+                """;
+
+        return jdbcTemplate.query(
+                sql,
+                (resultSet, rowNum) -> new ExpenseWithCategory(
+                        resultSet.getLong("id"),
+                        resultSet.getString("description"),
+                        resultSet.getBigDecimal("amount"),
+                        resultSet.getObject("category_id", Long.class),
+                        resultSet.getString("category_name")
+                ),
+                id
+        ).stream().findFirst();
     }
 
     public Expense save(Expense expense) {

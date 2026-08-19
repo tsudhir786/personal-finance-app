@@ -5,6 +5,7 @@ import com.tirumareddy.finance.dto.ExpenseResponse;
 import com.tirumareddy.finance.dto.ExpenseWithCategoryResponse;
 import com.tirumareddy.finance.dto.UpdateExpenseRequest;
 import com.tirumareddy.finance.entity.Expense;
+import com.tirumareddy.finance.repository.projection.ExpenseWithCategory;
 import com.tirumareddy.finance.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,8 @@ public class ExpenseController {
     }
 
     @GetMapping("/{id}")
-    public ExpenseResponse getExpenseById(@PathVariable Long id) {
-        return expenseService.getExpenseById(id);
+    public ExpenseWithCategoryResponse getExpenseById(@PathVariable Long id) {
+        return expenseService.getExpenseWithCategoryById(id);
     }
 
     @PostMapping

@@ -30,30 +30,6 @@ public class ExpenseService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<ExpenseResponse> getExpenses() {
-        return expenseRepository.findAll()
-                .stream()
-                .map(expense -> new ExpenseResponse(
-                        expense.getId(),
-                        expense.getDescription(),
-                        expense.getAmount(),
-                        expense.getCategoryId()
-                )).toList();
-    }
-
-    public ExpenseResponse getExpenseById(Long id) {
-
-        Expense expense = expenseRepository.findById(id)
-                .orElseThrow(() -> new ExpenseNotFoundException(id));
-
-        return new ExpenseResponse(
-                expense.getId(),
-                expense.getDescription(),
-                expense.getAmount(),
-                expense.getCategoryId()
-        );
-    }
-
     public ExpenseResponse createExpense(CreateExpenseRequest request) {
 
         Category category = categoryRepository.findById(request.categoryId())
@@ -114,5 +90,21 @@ public class ExpenseService {
                         expenseWithCategory.categoryName()
                 ))
                 .toList();
+    }
+
+    public ExpenseWithCategoryResponse getExpenseWithCategoryById(Long id) {
+        ExpenseWithCategory expense =
+                expenseRepository.findByIdWithCategory(id)
+                        .orElseThrow(
+                                () -> new ExpenseNotFoundException(id)
+                        );
+
+        return new ExpenseWithCategoryResponse(
+                expense.id(),
+                expense.description(),
+                expense.amount(),
+                expense.categoryId(),
+                expense.categoryName()
+        );
     }
 }
