@@ -5,6 +5,7 @@ import com.tirumareddy.finance.dto.CreateCategoryRequest;
 import com.tirumareddy.finance.dto.UpdateCategoryRequest;
 import com.tirumareddy.finance.entity.Category;
 import com.tirumareddy.finance.exception.CategoryAlreadyExistsException;
+import com.tirumareddy.finance.exception.CategoryInUseException;
 import com.tirumareddy.finance.exception.CategoryNotFoundException;
 import com.tirumareddy.finance.repository.CategoryRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -80,10 +81,14 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long id) {
-        int rowsAffected = categoryRepository.deleteById(id);
+        try {
+            int rowsAffected = categoryRepository.deleteById(id);
 
-        if (rowsAffected == 0) {
-            throw new CategoryNotFoundException(id);
+            if (rowsAffected == 0) {
+                throw new CategoryNotFoundException(id);
+            }
+        } catch (DataIntegrityViolationException ex) {
+            throw new CategoryInUseException(id);
         }
     }
 }

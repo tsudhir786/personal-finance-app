@@ -10,6 +10,6 @@ public record ApiErrorResponse(
         Map<String, String> fieldErrors
 ) {
     public ApiErrorResponse {
-        System.out.println("Api Response DTO");
+        System.out.println("Api Error Response DTO");
     }
 }

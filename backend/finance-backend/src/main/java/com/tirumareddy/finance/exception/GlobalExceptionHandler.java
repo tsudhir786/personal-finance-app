@@ -77,4 +77,18 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(response);
     }
+
+    @ExceptionHandler(CategoryInUseException.class)
+    public ResponseEntity<ApiErrorResponse> handleCategoryInUse(
+            CategoryInUseException ex) {
+
+        ApiErrorResponse error = new ApiErrorResponse(
+                409,
+                "Conflict",
+                ex.getMessage(),
+                Map.of()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(error);
+    }
 }
