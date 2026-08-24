@@ -4,6 +4,7 @@ import com.tirumareddy.finance.dto.CreateExpenseRequest;
 import com.tirumareddy.finance.dto.ExpenseResponse;
 import com.tirumareddy.finance.entity.Category;
 import com.tirumareddy.finance.entity.Expense;
+import com.tirumareddy.finance.exception.CategoryNotFoundException;
 import com.tirumareddy.finance.repository.CategoryRepository;
 import com.tirumareddy.finance.repository.ExpenseRepository;
 
@@ -18,10 +19,10 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ExpenseServiceTest {
@@ -59,17 +60,11 @@ class ExpenseServiceTest {
                         categoryId
                 );
 
- /*       when(categoryRepository.findById(categoryId))
+        when(categoryRepository.findById(categoryId))
                 .thenReturn(Optional.of(category));
 
         when(expenseRepository.save(any(Expense.class)))
-                .thenReturn(savedExpense);*/
-
-        given(categoryRepository.findById(categoryId))
-                .willReturn(Optional.of(category));
-
-        given(expenseRepository.save(any(Expense.class)))
-                .willReturn(savedExpense);
+                .thenReturn(savedExpense);
 
         // ACT
         ExpenseResponse response =
@@ -84,5 +79,34 @@ class ExpenseServiceTest {
         // VERIFY
         verify(categoryRepository).findById(categoryId);
         verify(expenseRepository).save(any(Expense.class));
+    }
+
+    @Test
+    void createExpense_whenCategoryDoesNotExist_shouldThrowCategoryNotFoundException() {
+//        Given
+        Long categoryId = 9999L;
+
+        CreateExpenseRequest request =
+                new CreateExpenseRequest(
+                        "Test Expense",
+                        new BigDecimal("500.00"),
+                        categoryId
+                );
+
+//        GIVEN/ARRANGE
+        when(categoryRepository.findById(categoryId))
+                .thenReturn(Optional.empty());
+
+//        WHEN + THEN
+        assertThrows(
+                CategoryNotFoundException.class,
+                () -> expenseService.createExpense(request)
+        );
+
+        verify(categoryRepository).findById(categoryId);
+
+        verify(expenseRepository, never())
+                .save(any(Expense.class));
+
     }
 }
