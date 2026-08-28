@@ -14,14 +14,14 @@ fetch("http://localhost:8080/api/expenses")
         expenses.forEach(expense => {
 
             const row = document.createElement("tr");
-            
-            const expenseElement =
-                document.createElement("p");
 
-                expenseElement.textContent =
-                    `${expense.description} - ₹${expense.amount} - ${expense.categoryName}`;
+            row.innerHTML = `
+                <td>${expense.description}</td>
+                <td>₹${expense.amount}</td>
+                <td>${expense.categoryName}</td>
+    `;
 
-                expenseContainer.appendChild(expenseElement);
+                expenseContainer.appendChild(row);
 
         });
     })
