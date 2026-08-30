@@ -32,3 +32,39 @@ fetch("http://localhost:8080/api/expenses")
     
 
     expenseContainer.textContent = "Expenses will appear here"
+
+
+    loadCategories();
+    
+
+
+    function loadCategories(){
+
+        fetch("http://localhost:8080/api/categories")
+            .then(response => response.json())
+            .then(categories => {
+
+                console.log(categories);
+
+                categories.forEach(category => {
+
+                    const option =
+                        document.createElement("option");
+
+                        option.value = category.id;
+                        option.textContent = category.name;
+
+                        categorySelect
+                        .appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching categories: ", error);
+            });
+    }
+
+    const categorySelect = 
+    document.getElementById('category');
+
+  
+
