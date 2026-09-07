@@ -14,6 +14,8 @@
 
                 console.log(expenses);
 
+                expenseContainer.replaceChildren();
+
                     expenses.forEach(expense => {
 
                     const row = document.createElement("tr");
@@ -101,6 +103,12 @@
                 })
                 .then(createdExpense => {
                     console.log("Created expense:", createdExpense);
+
+                    expenseForm.reset();
+                    
+                    expenseContainer.innerHTML = "";
+
+                    loadExpenses();
                 })
                 .catch(error => {
                     console.error("Error creating expense:", error);
