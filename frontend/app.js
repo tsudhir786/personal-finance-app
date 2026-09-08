@@ -8,6 +8,7 @@
             document.getElementById("expenses-container");
 
         function loadExpenses(){
+
         fetch("http://localhost:8080/api/expenses")
             .then(response => response.json())
             .then(expenses => {
@@ -91,27 +92,35 @@
             };
 
             fetch("http://localhost:8080/api/expenses", {
-                    method: "POST",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(request)
             })
                 .then(response => {
+
                     console.log("Status:", response.status);
+
+                    if(!response.ok){
+                        return response.json()
+                            .then(errorResponse => {
+                                throw errorResponse;
+                            });
+                    }
+
                     return response.json();
                 })
                 .then(createdExpense => {
+
                     console.log("Created expense:", createdExpense);
 
                     expenseForm.reset();
-                    
-                    expenseContainer.innerHTML = "";
-
                     loadExpenses();
                 })
                 .catch(error => {
-                    console.error("Error creating expense:", error);
+
+                    console.error("Error creating expenses:", error);
                 });
 
             console.log(request);
