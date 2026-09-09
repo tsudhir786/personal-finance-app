@@ -1,130 +1,112 @@
-        console.log("Finance frontend loaded");
+console.log("Finance frontend loaded");
 
-        let expensesData;
+let expensesData;
 
-        loadExpenses();
+loadExpenses();
 
-        const expenseContainer = 
-            document.getElementById("expenses-container");
+const expenseContainer = document.getElementById("expenses-container");
 
-        function loadExpenses(){
+function loadExpenses() {
+  fetch("http://localhost:8080/api/expenses")
+    .then((response) => response.json())
+    .then((expenses) => {
+      console.log(expenses);
 
-        fetch("http://localhost:8080/api/expenses")
-            .then(response => response.json())
-            .then(expenses => {
+      expenseContainer.replaceChildren();
 
-                console.log(expenses);
+      expenses.forEach((expense) => {
+        const row = document.createElement("tr");
 
-                expenseContainer.replaceChildren();
-
-                    expenses.forEach(expense => {
-
-                    const row = document.createElement("tr");
-
-                    row.innerHTML = `
+        row.innerHTML = `
                         <td>${expense.description}</td>
                         <td>₹${expense.amount}</td>
                         <td>${expense.categoryName}</td>
             `;
 
-                        expenseContainer.appendChild(row);
+        expenseContainer.appendChild(row);
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching expenses:", error);
+    });
+}
 
-                });
-            })
-            .catch(error => {
-                console.error("Error fetching expenses:", error);
-            });
-        }
+expenseContainer.textContent = "Expenses will appear here";
 
+loadCategories();
 
-        expenseContainer.textContent = "Expenses will appear here"
+const categorySelect = document.getElementById("category");
 
+function loadCategories() {
+  fetch("http://localhost:8080/api/categories")
+    .then((response) => response.json())
+    .then((categories) => {
+      console.log(categories);
 
-        loadCategories();
+      categories.forEach((category) => {
+        const option = document.createElement("option");
 
-        const categorySelect = 
-        document.getElementById('category');
+        option.value = category.id;
+        option.textContent = category.name;
 
-        function loadCategories(){
+        categorySelect.appendChild(option);
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching categories: ", error);
+    });
+}
 
-            fetch("http://localhost:8080/api/categories")
-                .then(response => response.json())
-                .then(categories => {
+const expenseForm = document.getElementById("expense-form");
 
-                    console.log(categories);
+expenseForm.addEventListener("submit", function (event) {
+  event.preventDefault();
 
-                    categories.forEach(category => {
+  const description = document.getElementById("description").value;
 
-                        const option =
-                            document.createElement("option");
+  const amount = document.getElementById("amount").value;
 
-                            option.value = category.id;
-                            option.textContent = category.name;
+  const categoryId = document.getElementById("category").value;
 
-                            categorySelect
-                            .appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error fetching categories: ", error);
-                });
-        }
+  const formError = document.getElementById("form-error");
 
+  const request = {
+    description: description,
+    amount: Number(amount),
+    categoryId: Number(categoryId),
+  };
 
-        const expenseForm = document.getElementById("expense-form");
+  fetch("http://localhost:8080/api/expenses", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  })
+    .then((response) => {
+      console.log("Status:", response.status);
 
-        expenseForm.addEventListener("submit", function(event) {
-            event.preventDefault();
+      if (!response.ok) {
+        return response.json().then((errorResponse) => {
+          throw errorResponse;
+        });
+      }
 
-            const description = 
-                document.getElementById("description").value;
+      return response.json();
+    })
+    .then((createdExpense) => {
+      console.log("Created expense:", createdExpense);
 
-            const amount = 
-                document.getElementById("amount").value;
+      expenseForm.reset();
+      loadExpenses();
+    })
+    .catch((error) => {
+      console.error("Error creating expenses:", error);
 
-            const categoryId =
-                document.getElementById("category").value;
+      formError.textContent =
+          error.message || "Unable to create expense";
 
-            const request = {
-                description: description,
-                amount: Number(amount),
-                categoryId: Number(categoryId)
-            };
+    });
 
-            fetch("http://localhost:8080/api/expenses", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(request)
-            })
-                .then(response => {
-
-                    console.log("Status:", response.status);
-
-                    if(!response.ok){
-                        return response.json()
-                            .then(errorResponse => {
-                                throw errorResponse;
-                            });
-                    }
-
-                    return response.json();
-                })
-                .then(createdExpense => {
-
-                    console.log("Created expense:", createdExpense);
-
-                    expenseForm.reset();
-                    loadExpenses();
-                })
-                .catch(error => {
-
-                    console.error("Error creating expenses:", error);
-                });
-
-            console.log(request);
-        })
-
-
-
+  console.log(request);
+});
