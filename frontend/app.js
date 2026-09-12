@@ -103,9 +103,15 @@ expenseForm.addEventListener("submit", function (event) {
     .catch((error) => {
       console.error("Error creating expenses:", error);
 
-      formError.textContent =
-          error.message || "Unable to create expense";
+      if (error.fieldErrors) {
+        const messages = Object.entries(error.fieldErrors).map(
+          ([field, message]) => `${field}: ${message}`,
+        );
 
+        formError.textContent = messages.join(" | ");
+      } else {
+        formError.textContent = error.messages || "Unable to create expense";
+      }
     });
 
   console.log(request);
