@@ -70,6 +70,12 @@ expenseForm.addEventListener("submit", function (event) {
 
   const formError = document.getElementById("form-error");
 
+  const formMessage = document.getElementById("form-message");
+
+  formError.textContent = "";
+
+  formMessage.textContent = "";
+
   const request = {
     description: description,
     amount: Number(amount),
@@ -96,6 +102,8 @@ expenseForm.addEventListener("submit", function (event) {
     })
     .then((createdExpense) => {
       console.log("Created expense:", createdExpense);
+
+      formMessage.textContent = "Expense created successfully";
 
       expenseForm.reset();
       loadExpenses();
