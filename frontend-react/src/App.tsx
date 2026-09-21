@@ -1,6 +1,3 @@
-import heroImg from "./assets/hero.png";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
 
@@ -20,6 +17,9 @@ function App() {
 
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:8080/api/expenses")
@@ -46,9 +46,26 @@ function App() {
       <h1>Personal Finance App</h1>
       <h2>Expenses</h2>
 
-      <select>
-        <option value = "">Select Category</option>
-        
+      <input
+        type="text"
+        placeholder="Description"
+        value={description}
+        onChange={(event) => setDescription(event.target.value)}
+      />
+
+      <input
+        type="number"
+        placeholder="Amount"
+        value={amount}
+        onChange={(event) => setAmount(event.target.value)}
+        />
+
+      <select
+        value={selectedCategoryId}
+        onChange={(event) => setSelectedCategoryId(event.target.value)}
+      >
+        <option value="">Select Category</option>
+
         {categories.map((category) => (
           <option key={category.id} value={category.id}>
             {category.name}
