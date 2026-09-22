@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type SubmitEvent } from "react";
 
 function App() {
   type Expense = {
@@ -41,37 +41,54 @@ function App() {
       });
   }, []);
 
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const request = {
+      description: description,
+      amount: Number(amount),
+      categoryId: Number(selectedCategoryId)
+    }
+    console.log(request);
+  };
+
   return (
     <div>
       <h1>Personal Finance App</h1>
       <h2>Expenses</h2>
 
-      <input
-        type="text"
-        placeholder="Description"
-        value={description}
-        onChange={(event) => setDescription(event.target.value)}
-      />
-
-      <input
-        type="number"
-        placeholder="Amount"
-        value={amount}
-        onChange={(event) => setAmount(event.target.value)}
+      <form id="expense-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Description"
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
         />
 
-      <select
-        value={selectedCategoryId}
-        onChange={(event) => setSelectedCategoryId(event.target.value)}
-      >
-        <option value="">Select Category</option>
+        <input
+          type="number"
+          placeholder="Amount"
+          value={amount}
+          onChange={(event) => setAmount(event.target.value)}
+        />
 
-        {categories.map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
-          </option>
-        ))}
-      </select>
+        <select
+          value={selectedCategoryId}
+          onChange={(event) => setSelectedCategoryId(event.target.value)}
+        >
+          <option value="">Select Category</option>
+
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+
+        <button id="add-expense-button" type="submit">
+          Add Expense
+        </button>
+      </form>
 
       {expenses.map((expense) => (
         <p key={expense.id}>
