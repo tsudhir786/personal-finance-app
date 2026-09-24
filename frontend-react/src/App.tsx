@@ -50,6 +50,21 @@ function App() {
       categoryId: Number(selectedCategoryId)
     }
     console.log(request);
+
+    fetch("http://localhost:8080/api/expenses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    })
+      .then((response) => {
+        console.log("Status:", response.status);
+        return response.json()
+      })
+      .then((createdExpense) => {
+        console.log("Created Expense:", createdExpense);
+      });
   };
 
   return (
