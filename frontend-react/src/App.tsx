@@ -21,16 +21,16 @@ function App() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
 
-  useEffect(() => {
+  const loadExpenses = () => {
     fetch("http://localhost:8080/api/expenses")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setExpenses(data);
-      })
-      .catch((error) => {
-        console.log("Error fetching expenses: ", error);
       });
+  };
+
+  useEffect(() => {
+    loadExpenses();
   }, []);
 
   useEffect(() => {
@@ -47,8 +47,8 @@ function App() {
     const request = {
       description: description,
       amount: Number(amount),
-      categoryId: Number(selectedCategoryId)
-    }
+      categoryId: Number(selectedCategoryId),
+    };
     console.log(request);
 
     fetch("http://localhost:8080/api/expenses", {
@@ -60,10 +60,16 @@ function App() {
     })
       .then((response) => {
         console.log("Status:", response.status);
-        return response.json()
+        return response.json();
       })
       .then((createdExpense) => {
         console.log("Created Expense:", createdExpense);
+
+        loadExpenses();
+
+        setDescription("");
+        setAmount("");
+        setSelectedCategoryId("");
       });
   };
 
