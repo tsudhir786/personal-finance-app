@@ -20,6 +20,9 @@ function App() {
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
+  const [formMessage, setFormMessage] = useState("");
+
+  console.log("Render amount:", amount);
 
   const loadExpenses = () => {
     fetch("http://localhost:8080/api/expenses")
@@ -70,6 +73,8 @@ function App() {
         setDescription("");
         setAmount("");
         setSelectedCategoryId("");
+        setFormMessage(`Expense created successfully with ID 
+          ${createdExpense.id} and Description ${createdExpense.description}`);
       });
   };
 
@@ -90,7 +95,9 @@ function App() {
           type="number"
           placeholder="Amount"
           value={amount}
-          onChange={(event) => setAmount(event.target.value)}
+          onChange={(event) => {
+            setAmount(event.target.value);
+          }}
         />
 
         <select
@@ -110,6 +117,8 @@ function App() {
           Add Expense
         </button>
       </form>
+
+      <p>{formMessage}</p>
 
       {expenses.map((expense) => (
         <p key={expense.id}>
