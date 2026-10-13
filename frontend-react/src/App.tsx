@@ -63,6 +63,12 @@ function App() {
     })
       .then((response) => {
         console.log("Status:", response.status);
+
+        if (!response.ok) {
+          return response.json().then((errorResponse) => {
+            throw errorResponse;
+          });
+        }
         return response.json();
       })
       .then((createdExpense) => {
@@ -75,6 +81,17 @@ function App() {
         setSelectedCategoryId("");
         setFormMessage(`Expense created successfully with ID 
           ${createdExpense.id} and Description ${createdExpense.description}`);
+      })
+      .catch((errorResponse) => {
+        if (errorResponse.fieldErrors) {
+          const errorMessage = Object.entries(errorResponse.fieldErrors)
+            .map(([field, message]) => `${field}: ${message}`)
+            .join(" | ");
+
+          setFormMessage(errorMessage);
+        } else {
+          setFormMessage(errorResponse.message ?? "Failed to create expense");
+        }
       });
   };
 
