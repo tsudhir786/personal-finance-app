@@ -1,15 +1,10 @@
 import "./App.css";
 import { useEffect, useState, type SubmitEvent } from "react";
+import type { Expense } from "./types/Expense";
+import ExpenseList from "./ExpenseList";
 
 function App() {
-  type Expense = {
-    id: number;
-    description: string;
-    amount: number;
-    categoryId: number;
-    categoryName: string;
-  };
-
+ 
   type Category = {
     id: number;
     name: string;
@@ -137,11 +132,7 @@ function App() {
 
       <p>{formMessage}</p>
 
-      {expenses.map((expense) => (
-        <p key={expense.id}>
-          {expense.description} - ₹{expense.amount} - {expense.categoryName}
-        </p>
-      ))}
+      <ExpenseList expenses={expenses} />
     </div>
   );
 }
