@@ -2,14 +2,10 @@ import "./App.css";
 import { useEffect, useState, type SubmitEvent } from "react";
 import type { Expense } from "./types/Expense";
 import ExpenseList from "./ExpenseList";
+import ExpenseForm from "./ExpenseForm";
+import type { Category } from "./types/Category";
 
 function App() {
- 
-  type Category = {
-    id: number;
-    name: string;
-  };
-
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
@@ -95,40 +91,16 @@ function App() {
       <h1>Personal Finance App</h1>
       <h2>Expenses</h2>
 
-      <form id="expense-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Description"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-        />
-
-        <input
-          type="number"
-          placeholder="Amount"
-          value={amount}
-          onChange={(event) => {
-            setAmount(event.target.value);
-          }}
-        />
-
-        <select
-          value={selectedCategoryId}
-          onChange={(event) => setSelectedCategoryId(event.target.value)}
-        >
-          <option value="">Select Category</option>
-
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-
-        <button id="add-expense-button" type="submit">
-          Add Expense
-        </button>
-      </form>
+      <ExpenseForm
+        description={description}
+        setDescription={setDescription}
+        amount={amount}
+        setAmount={setAmount}
+        categories={categories}
+        selectedCategoryId={selectedCategoryId}
+        setSelectedCategoryId={setSelectedCategoryId}
+        onSubmit={handleSubmit}
+      />
 
       <p>{formMessage}</p>
 
